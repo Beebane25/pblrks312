@@ -1,0 +1,117 @@
+body{
+	margin: 0;
+	padding: 0;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	min-height: 100vh;
+	font-family:'Lucida Sans';
+	background: #b0deff;
+    background-image: url("/static/images/Component.png");
+	background-size: cover;  /* Memastikan gambar menutupi seluruh halaman */
+    background-position: center;  /* Menempatkan gambar di tengah */
+    background-repeat: no-repeat;  /* Gambar tidak akan diulang */
+}
+.main{
+	width: 600px;
+	height: 600px;
+    min-height: 650px;
+	background: transparent;
+	overflow: hidden;
+	border-radius: 10px;
+	box-shadow: 5px 20px 50px #000;
+}
+#chk{
+	display: none;
+}
+.signup, .login {
+    height: auto;
+    min-height: 700px; /* Atau sesuai kebutuhan */
+}
+
+.signup{
+	position: relative;
+	width:100%;
+}
+.signup input::placeholder{
+	color: rgb(0, 0, 0);
+}
+label{
+	color: rgb(255, 205, 135);
+	font-size: 2.3em;
+	justify-content: center;
+	display: flex;
+	margin: 20px;
+	font-weight: bold;
+	cursor: pointer;
+	transition: .5s ease-in-out;
+}
+input{
+	width: 60%;
+	height: 10px;
+	background: transparent;
+	justify-content: center;
+	display: flex;
+	margin: 5px auto;
+	padding: 12px;
+    border: 2px solid rgb(255, 214, 156);
+	outline: none;
+	border-radius: 5px;
+}
+.g-recaptcha {
+    transform: translateX(25%); 
+}
+button{
+	width: 60%;
+	height: 40px;
+	margin: 10px auto;
+	justify-content: center;
+	display: block;
+	color: #ffff;
+	background: #00558e;
+	font-size: 1em;
+	font-weight: bold;
+	margin-top: 30px;
+	outline: none;
+	border: none;
+	border-radius: 5px;
+	transition: .2s ease-in;
+	cursor: pointer;
+}
+button:hover{
+	background: #6d44b8;
+}
+
+.login{
+	background: hsla(179, 100%, 9%, 0.683);
+	border-radius: 60% / 10%;
+	transform: translateY(-180px);
+	transition: .8s ease-in-out;
+}
+
+.login a{
+	color: rgb(255, 203, 131);
+	text-decoration: none;
+	margin-left: 90px;
+}
+
+.login label{
+    padding-top: 25px;
+	color: rgb(255, 206, 138);
+	font-size: 2.3em;
+	justify-content: center;
+	display: flex;
+    top: 40px;
+	margin-bottom: 40px;
+	font-weight: bold;
+	cursor: pointer;
+}
+.login button{
+    margin-top: 0px;
+}
+#chk:checked ~ .login{
+	transform: translateY(-500px);
+}
+#chk:checked ~ .login label{
+	transform: scale(1);	
+}

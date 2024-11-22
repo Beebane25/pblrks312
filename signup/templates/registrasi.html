@@ -1,0 +1,40 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="/static/css/registrasi.css">
+    <title>Signup and Login</title>
+    <script src="https://www.google.com/recaptcha/api.js" async defer></script>
+</head>
+<body>
+    <div class="main"> 
+        <input type="checkbox" id="chk" aria-hidden="true">
+            <div class="signup">
+                <form method="POST" id="signupForm">
+                    {% csrf_token %}
+                    <label for="chk" aria-hidden="true">Sign up</label>
+                    <input type="hidden" name="signup" value="1">
+                    <input type="text" name="username" placeholder="Username" required><br>
+                    <input type="email" name="email" placeholder="Email" required><br>
+                    <input type="password" name="password" placeholder="Password" required><br>
+                    <input type="text" name="full_name" placeholder="Full Name"><br>
+                    <div class="g-recaptcha" data-sitekey="6Lcp34AqAAAAAMlVW3-ITz8UaOyuTq6ht3fZkUHg"></div>
+                    <button type="submit">Sign Up</button>
+                </form>
+            </div>
+            <div class="login">        
+                <form method="POST" id="loginForm">
+                    {% csrf_token %}
+                    <label for="chk" aria-hidden="true">Login</label>
+                    <input type="hidden" name="login" value="1">
+                    <input type="text" name="username" placeholder="Username" required><br>
+                    <input type="password" name="password" placeholder="Password" required><br>
+                    <button type="submit">Login</button>
+                    <a href="/">back to home page</a>
+                </form>
+            </div>
+    </div>
+</body>
+</html>

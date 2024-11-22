@@ -1,0 +1,325 @@
+<!DOCTYPE html>
+<html lang="en">
+{% load static %}
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>E-Commerce | RKS-312</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link rel="stylesheet" href="{% static 'css/home1.css' %}">
+</head>
+
+<body>
+    <header class="title">DESSERT<br>MENU</header>
+    <nav class="navbar">
+        <div class="container">
+            <ul class="nav-links">
+                <li><a href="#">Home</a></li>
+                <li><a href="#">About</a></li>
+                <li><a href="#category-section">Best Seller</a></li>
+                <li><a href="#category-section2">Category</a></li>
+                <div class="search-container">
+                    <i class="fas fa-search"></i>
+                    <input type="text" id="searchInput" placeholder="Search..">
+                </div>
+            </ul>
+            <div class="menu-toggle" id="mobile-menu">
+                <span class="bar"></span>
+                <span class="bar"></span>
+                <span class="bar"></span>
+            </div>
+            <div class="header-icon">
+                <a href="{% url 'signup' %}" id="account-icon">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" fill="rgb(103, 60, 0)" class="bi bi-person-fill-check" viewBox="0 0 16 16">
+                        <path d="M12.5 16a3.5 3.5 0 1 0 0-7 3.5 3.5 0 0 0 0 7m1.679-4.493-1.335 2.226a.75.75 0 0 1-1.174.144l-.774-.773a.5.5 0 0 1 .708-.708l.547.548 1.17-1.951a.5.5 0 1 1 .858.514M11 5a3 3 0 1 1-6 0 3 3 0 0 1 6 0"/>
+                        <path d="M2 13c0 1 1 1 1 1h5.256A4.5 4.5 0 0 1 8 12.5a4.5 4.5 0 0 1 1.544-3.393Q8.844 9.002 8 9c-5 0-6 3-6 4"/>
+                    </svg>
+                </a>
+                <a href="#" id="cart-icon">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" fill="rgb(103, 60, 0)" class="bi bi-cart4" viewBox="0 0 16 16">
+                        <path d="M0 2.5A.5.5 0 0 1 .5 2H2a.5.5 0 0 1 .485.379L2.89 4H14.5a.5.5 0 0 1 .485.621l-1.5 6A.5.5 0 0 1 13 11H4a.5.5 0 0 1-.485-.379L1.61 3H.5a.5.5 0 0 1-.5-.5M3.14 5l.5 2H5V5zM6 5v2h2V5zm3 0v2h2V5zm3 0v2h1.36l.5-2zm1.11 3H12v2h.61zM11 8H9v2h2zM8 8H6v2h2zM5 8H3.89l.5 2H5zm0 5a1 1 0 1 0 0 2 1 1 0 0 0 0-2m-2 1a2 2 0 1 1 4 0 2 2 0 0 1-4 0m9-1a1 1 0 1 0 0 2 1 1 0 0 0 0-2m-2 1a2 2 0 1 1 4 0 2 2 0 0 1-4 0"/>
+                    </svg>
+                </a>
+            </div>
+        </div>
+
+        <script>
+            document.addEventListener('DOMContentLoaded', function() {
+                const cartIcon = document.getElementById('cart-icon');
+                const shoppingCart = document.getElementById('shoppingCart');
+                const closeBtn = document.querySelector('.close-btn');
+
+                cartIcon.addEventListener('click', (event) => {
+                    event.preventDefault(); 
+                    shoppingCart.style.right = '0'; 
+                });
+
+                closeBtn.addEventListener('click', () => {
+                    shoppingCart.style.right = '-100%'; 
+                });
+            });
+        </script>
+    </nav>
+
+    <script> //script navbar
+        const menuToggle = document.getElementById('mobile-menu');
+        menuToggle.addEventListener('click', () => {
+            const navLinks = document.querySelector('.nav-links');
+            navLinks.classList.toggle('active'); // Mengaktifkan atau menonaktifkan class active
+        });
+    </script>
+
+    <div id="shoppingCart" class="cart-sidebar">
+        <h2>Shopping Cart</h2>
+        <div class="cart-items">
+            <!-- Isi keranjang belanja akan ditampilkan di sini -->
+        </div>
+        <div class="cart-footer">
+            <button class="close-btn">CLOSE</button>
+            <ton class="checkout-btn">Check Out</button>
+        </div>
+    </div>
+    <div class="description">
+        <p>Food tastes Better When<br>You Eat it With Your Hands</p>
+        <div class="kuekue">
+            <img src="{% static 'images/images (cakecake).png' %}" width="350px" alt="Cake Image"> 
+        </div>
+    </div>
+
+    <div id="category-allpost" class="postingan">
+        <h1>All Post</h1>
+        <div class="makanan-container">
+            <!-- Looping untuk menampilkan 8 makanan pertama -->
+            {% for makanan in makanan_list %}
+                <div class="makanan" id="makanan-{{ forloop.counter }}">
+                    <img src="{{ makanan.gambar.url }}" alt="{{ makanan.nama_menu }}">
+                    <h1 class="makanan-name">{{ makanan.nama_menu }}</h1>
+                    <p>Price: ${{ makanan.harga }}</p>
+                    <div class="rating">
+                        {% for i in range_angka %}
+                            {% if i <= makanan.kepuasan %}
+                                <i class="fas fa-star filled"></i>
+                            {% else %}
+                                <i class="fas fa-star"></i>
+                            {% endif %}
+                        {% endfor %}
+                        <span>{{ makanan.kepuasan }}%</span>
+                    </div>
+                    <p class="kategori">Category: {{ makanan.kategori }}</p>
+                    <form class="rating-form" data-menu-id="{{ makanan.id }}">
+                        <label for="rating-{{ makanan.id }}">Rate:</label>
+                        <select id="rating-{{ makanan.id }}" name="rating">
+                            {% for i in range_angka %}
+                                <option value="{{ i }}">{{ i }}</option>
+                            {% endfor %}
+                        </select>
+                        <button type="submit">Submit</button>
+                    </form>
+                    <button class="btn-add-to-card">Add to Cart</button>
+                </div>
+                {% if forloop.counter == 4 %}
+                    <div id="more-content" style="display:none;">
+                {% endif %}
+            {% endfor %}
+        </div>
+    </div>
+    <button class="btn-show-all" id="show-more" style="display:block; margin: 20px auto;">Show All</button>
+    
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const showMoreButton = document.getElementById('show-more');
+            const moreContent = document.getElementById('more-content');
+    
+            showMoreButton.addEventListener('click', function() {
+                moreContent.style.display = 'block';
+                showMoreButton.style.display = 'none';
+            });
+        });
+    </script>
+
+    <script>
+        document.querySelectorAll('.rating-star').forEach(star => {
+            star.addEventListener('click', function () {
+                const menuId = this.dataset.menuId;  // ID menu terkait
+                const ratingValue = this.dataset.value;  // Nilai rating (1-5)
+                fetch(`/menu/${menuId}/`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-CSRFToken': '{{ csrf_token }}'
+                    },
+                    body: JSON.stringify({ rating: ratingValue })
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        alert(data.message);
+                        location.reload(); // Reload halaman untuk memperbarui kepuasan
+                    } else {
+                        alert(data.message);
+                    }
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    es.status(500).json({ success: false, message: 'Server error' });
+                });
+            });
+        });
+    </script>   
+
+    <div id="category-section" class="section-baru">
+        <h4>BEST SELLERS</h4>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const searchInput = document.getElementById('searchInput');
+            const makananList = document.querySelectorAll('.makanan');
+            
+            // Event listener untuk input pencarian
+            searchInput.addEventListener('input', function() {
+                const query = searchInput.value.toLowerCase();
+    
+                // Mencari makanan yang sesuai dengan input pengguna
+                makananList.forEach(makanan => {
+                    const makananName = makanan.querySelector('.makanan-name').textContent.toLowerCase();
+    
+                    if (makananName.includes(query)) {
+                        // Menggulung halaman ke posisi makanan yang ditemukan
+                        makanan.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                        makanan.style.border = '2px solid rgb(103, 60, 0)'; // Highlight makanan
+                    } else {
+                        makanan.style.border = 'none'; // Menghapus highlight jika tidak cocok
+                    }
+                });
+            });
+        });
+    </script>
+</div>
+    <div id="category-section2" class="section2-kedua">
+        <h3>CATEGORY</h3>
+    </div>
+
+<script>
+    const cartIcon = document.getElementById("cart-icon");
+    const cartSidebar = document.querySelector(".cart-sidebar");
+    const cartItemsContainer = document.querySelector(".cart-items");
+    const closeBtn = document.querySelector(".close-btn");
+    
+    // Seleksi semua tombol "Add to Cart" dari kedua kategori
+    const addToCartButtons = document.querySelectorAll(".makanan .btn-add-to-card, .makanan2 .btn-add-to-card");
+
+    // Fungsi untuk menampilkanbut sidebar keranjang
+    function openCartSidebar() {
+        cartSidebar.style.right = "0";
+    }
+
+    // Fungsi untuk menutup sidebar keranjang
+    function closeCartSidebar() {
+        cartSidebar.style.right = "-100%";
+    }
+
+    // Fungsi untuk menghapus item dari keranjang
+    function removeCartItem(cartItem) {
+        cartItem.remove();
+    }
+
+    // Fungsi untuk menambah jumlah item
+    function increaseQuantity(event) {
+        const cartItem = event.target.closest(".cart-item");
+        const quantityDisplay = cartItem.querySelector(".quantity-display");
+        const priceDisplay = cartItem.querySelector(".item-price");
+        const unitPrice = parseFloat(cartItem.getAttribute("data-unit-price"));
+
+        let quantity = parseInt(quantityDisplay.textContent);
+        quantity++;
+        quantityDisplay.textContent = quantity;
+
+        priceDisplay.textContent = `Rp ${(unitPrice * quantity).toFixed(2)}`;
+    }
+
+    // Fungsi untuk mengurangi jumlah item
+    function decreaseQuantity(event) {
+        const cartItem = event.target.closest(".cart-item");
+        const quantityDisplay = cartItem.querySelector(".quantity-display");
+        const priceDisplay = cartItem.querySelector(".item-price");
+        const unitPrice = parseFloat(cartItem.getAttribute("data-unit-price"));
+
+        let quantity = parseInt(quantityDisplay.textContent);
+        
+        if (quantity > 1) {
+            quantity--;
+            quantityDisplay.textContent = quantity;
+            priceDisplay.textContent = `Rp ${(unitPrice * quantity).toFixed(2)}`;
+        } else {
+            removeCartItem(cartItem);
+        }
+    }
+
+    // Fungsi untuk menambahkan item ke keranjang
+    function addToCart(event) {
+        const makananElement = event.target.closest(".makanan, .makanan2");
+        const itemName = makananElement.querySelector(".makanan-name").textContent;
+        const itemPrice = parseFloat(makananElement.querySelector("p").textContent.replace(/[^0-9.-]+/g,""));
+        const itemImageSrc = makananElement.querySelector("img").src;
+
+        // Cek apakah item sudah ada di keranjang
+        const existingCartItem = Array.from(cartItemsContainer.children).find(item => 
+            item.querySelector("h4").textContent === itemName
+        );
+
+        if (existingCartItem) {
+            const quantityDisplay = existingCartItem.querySelector(".quantity-display");
+            quantityDisplay.textContent = parseInt(quantityDisplay.textContent) + 1;
+            const priceDisplay = existingCartItem.querySelector(".item-price");
+            const unitPrice = parseFloat(existingCartItem.getAttribute("data-unit-price"));
+            const newQuantity = parseInt(quantityDisplay.textContent);
+            priceDisplay.textContent = `Rp ${(unitPrice * newQuantity).toFixed(2)}`;
+        } else {
+            const cartItem = document.createElement("div");
+            cartItem.classList.add("cart-item");
+            cartItem.setAttribute("data-unit-price", itemPrice);
+            cartItem.innerHTML = `
+                <div style="display: flex; align-items: center; gap: 10px; width: 100%;">
+                    <img src="${itemImageSrc}" alt="${itemName}" width="50" height="50">
+                    <div style="flex-grow: 1;">
+                        <h4>${itemName}</h4>
+                        <p class="item-price">Rp ${itemPrice.toFixed(2)}</p>
+                    </div>
+                    <div class="quantity-controls" style="display: flex; align-items: center; gap: 5px;">
+                        <button class="quantity-btn decrease-btn">-</button>
+                        <span class="quantity-display">1</span>
+                        <button class="quantity-btn increase-btn">+</button>
+                    </div>
+                </div>
+            `;
+
+            const increaseButton = cartItem.querySelector(".increase-btn");
+            const decreaseButton = cartItem.querySelector(".decrease-btn");
+            increaseButton.addEventListener("click", increaseQuantity);
+            decreaseButton.addEventListener("click", decreaseQuantity);
+
+            cartItemsContainer.appendChild(cartItem);
+        }
+    }
+
+    // Event listener untuk tombol "Add to Cart" dari kedua kategori
+    addToCartButtons.forEach(button => {
+        button.addEventListener("click", addToCart);
+    });
+
+    cartIcon.addEventListener("click", openCartSidebar);
+    closeBtn.addEventListener("click", closeCartSidebar);
+
+    document.addEventListener("scroll", function () {
+    const navbar = document.querySelector(".navbar"); // Pilih elemen navbar
+    if (window.scrollY > 0) { // Jika halaman digulir
+        navbar.classList.add("scrolled");
+    } else {
+        navbar.classList.remove("scrolled");
+    }
+});
+</script>
+</div>
+</body>
+</html>

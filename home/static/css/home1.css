@@ -1,0 +1,397 @@
+/*=============halaman==============*/
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    text-decoration: none;
+}
+/*==============body================*/
+body {
+    color: rgb(103, 60, 0);
+    max-width: 1920px;
+    margin: auto;
+    font-family: Brush Script MT;
+    overflow: auto;
+    background: #ffc888ab;
+    animation: gradient 15s ease infinite;
+    background-size: 400% 400%;
+    background-attachment: fixed;
+}
+
+/*================background===============*/
+
+@keyframes gradient {
+    0% {
+        background-position: 0% 0%;
+    }
+    50% {
+        background-position: 100% 100%;
+    }
+    100% {
+        background-position: 0% 0%;
+    }
+}
+
+.wave {
+    background: rgb(244, 219, 166);
+    border-radius: 1000% 1000% 0 0;
+    position: fixed;
+    width: 200%;
+    height: 8em;
+    animation: wave 10s -3s linear infinite;
+    transform: translate3d(0, 0, 0);
+    opacity: 0.8;
+    bottom: 0;
+    left: 0;
+    z-index: -1;
+}
+
+.wave:nth-of-type(2) {
+    bottom: -1.25em;
+    animation: wave 18s linear reverse infinite;
+    opacity: 0.8;
+}
+
+.wave:nth-of-type(3) {
+    bottom: -2.5em;
+    animation: wave 20s -1s reverse infinite;
+    opacity: 0.9;
+}
+
+@keyframes wave {
+    2% {
+        transform: translateX(1);
+    }
+
+    25% {
+        transform: translateX(-25%);
+    }
+
+    50% {
+        transform: translateX(-50%);
+    }
+
+    75% {
+        transform: translateX(-25%);
+    }
+
+    100% {
+        transform: translateX(1);
+    }
+}
+
+/*==============judul dan deskripsi================*/
+
+.title{
+    font-size: 60px;
+    text-align: center;
+    margin:20px;
+}
+
+.description{
+    font-size: 50px;
+    align-items: center;
+    justify-content:space-evenly;
+    margin: 10px;
+    display: flex;
+}
+
+/*================ICON==========================*/
+
+.header-icon {
+    text-align: right;
+    margin: 20px;
+
+}
+
+/*======================NAVBAR=========================*/
+
+.navbar .container {
+    position: sticky;
+    background: transparent;
+    display: flex;
+    justify-content: space-between; /* Membuat logo, menu, dan ikon cart berjarak */
+    align-items: center; /* Menjaga semua elemen sejajar secara vertikal */
+    padding: 10px 10px; /* Tambahkan padding sesuai kebutuhan */
+}
+
+.nav-links{
+    list-style: none;
+    display: flex;
+    padding-right: 1px;
+}
+
+.nav-links li{
+    margin-left: 20px;
+}
+
+.nav-links a{
+    color: rgb(103, 60, 0);
+    font-size: 40px;
+}
+
+.search-container {
+    position: relative;
+    width: 300px; /* Sesuaikan lebar kolom pencarian */
+    margin: 10px auto; /* Mengatur margin */
+    margin-left: 20px;
+}
+
+.search-container i {
+    position: absolute;
+    top: 50%;
+    left: 10px; /* Jarak dari tepi kiri */
+    font-size: 1.2rem;
+    transform: translateY(-50%);
+    pointer-events: none; /* Agar ikon tidak dapat diklik */
+}
+
+.search-container input {
+    background: transparent;
+    width: 100%;
+    padding: 10px 10px 10px 35px; /* Tambahkan padding kiri untuk memberi ruang bagi ikon */
+    border: 2px solid rgb(103, 60, 0);
+    border-radius: 20px; /* Membuat sudut kolom membulat */
+    outline: none;
+}
+
+.search-container input:focus {
+    border-color: rgb(103, 60, 0); /* Warna saat input fokus */
+    box-shadow: 0 0 5px rgba(103, 60, 0, 0.5);
+}
+
+.search-container input::placeholder {
+    color: rgb(103, 60, 0);
+    font-size: 16px;
+}
+
+.search-container input[type="text"]:focus {
+    animation: borderAnimation 2s infinite; /* Sesuaikan durasi animasi sesuai kebutuhan */
+}
+
+@keyframes borderAnimation {
+    0% {
+        border-color: rgb(195,176,145);
+    }
+    25% {
+        border-color: rgb(160, 93, 0);
+    }
+    50% {
+        border-color: rgb(244, 219, 166);
+    }
+    75% {
+        border-color: rgb(227, 144, 0);
+    }
+    100% {
+        border-color: rgb(78, 237, 255);
+    }
+}
+
+.menu-toggle {
+    flex-direction: column; /* Mengatur bar menjadi kolom */
+}
+
+.bar {
+    height: 3px; /* Tinggi bar */
+    width: 25px; /* Lebar bar */
+    background-color: white; /* Warna bar */
+    margin: 3px 0; /* Jarak antara bar */
+}
+
+/*=====================cart============================*/
+
+.cart-sidebar {
+    position: fixed;
+    top: 0;
+    right: -100%;
+    width: 300px;
+    height: 100%;
+    background-color: rgb(244, 219, 166);
+    color: #fff;
+    transition: right 0.3s ease;
+    z-index: 1000;
+    display: flex;
+    flex-direction: column;
+    font-family: 'MADE Sunflower', sans-serif;
+    
+}
+
+.cart-sidebar h2 {
+    padding: 20px;
+    background-color: rgb(227, 144, 0);
+    margin: 0;
+}
+
+.cart-items {
+    display: flex;
+    flex-grow: 1;
+    padding: 20px;
+    gap: 10px;
+    flex-direction: column;
+}
+
+.cart-footer {
+    padding: 20px;
+    display: flex;
+    justify-content: space-between;
+}
+
+.close-btn, .checkout-btn {
+    background-color: #fff;
+    color: #333;
+    padding: 10px 20px;
+    border: none;
+    cursor: pointer;
+    border-radius: 10px;
+}
+
+.checkout-btn {
+    background-color: #f1c40f;
+    border-radius: 10px;
+}
+
+#cart-icon {
+    cursor: pointer;
+    margin-left: 20px;
+}
+
+@media screen and (max-width: 768px) {
+    .bar {
+        height: 3px; /* Tinggi bar */
+        width: 30px; /* Lebar bar */
+        background-color: rgb(103, 60, 0); /* Ubah warna di sini */
+        margin: 2px; /* Jarak antara bar */
+    }
+    .menu-toggle {
+        display: flex; /* Pastikan menu toggle ditampilkan */
+        cursor: pointer; /* Menambahkan kursor pointer untuk indikasi bahwa ini bisa diklik */
+        flex-direction: column; /* Agar terlihat seperti garis tiga */
+    }
+    .nav-links {
+        display: none; /* Menyembunyikan nav links secara default */
+        width: 350px;
+        position: absolute; /* Menjadikan box muncul di bawah toggle */
+        top: 260px; /* Atur jarak dari atas */
+        left: 0;
+        right: 0; /* Agar box melebar sesuai lebar navbar */
+        background-color: rgb(244, 219, 166); /* Warna background */
+        border: 1px solid rgb(140, 75, 0); /* Border untuk box */
+        border-radius: 5px; /* Menghaluskan sudut */
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2); /* Bayangan untuk efek 3D */
+        z-index: 10; /* Pastikan box di atas elemen lain */
+    }
+    .nav-links.active {
+        display: list-item; /* Menampilkan link ketika menu toggle aktif */
+    }
+    .nav-links input[type="text"]{
+        left: 0;
+    }
+}
+
+/*=================section2===============*/
+.section2-kedua{
+    text-align:center ;
+    padding: 25px;
+    font-size: 50px;
+
+}
+
+#category-allpost{
+    align-items: center;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+.makanan-container{
+    display: flex;
+    justify-content:center;
+    flex-wrap: wrap;
+    margin: 20px;
+}
+.makanan{
+    background-color: #f9f9f9; /* Latar belakang formulir */
+    border: 1px solid #ccc; /* Garis batas */
+    border-radius: 8px; /* Sudut melengkung */
+    padding: 20px; /* Ruang di dalam formulir */
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1); /* Bayangan */
+    max-width: 700px; /* Lebar maksimal formulir */
+    height: 300px;
+    text-align: center;
+    margin: 10px;
+    align-items: center;
+}
+.makanan img {
+    height: 100px;
+    width: 100px;
+}
+
+.btn-show-all {
+    background-color: #d3d3d3;
+    border: none;
+    color: #699a8c;
+    font-size: 16px;
+    font-family: 'MADE Sunflower', sans-serif;
+    padding: 10px 20px;
+    border-radius: 10px;
+    cursor: pointer;
+    margin: 20px auto;
+    display: block;  /* Letakkan di tengah */
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+h5 {
+    margin-top: 40px;
+    margin-bottom: 40px;
+    font-size: 50px;
+    text-align: center;
+}
+
+#category-section {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 20px;
+    justify-content: center;
+    font-size: 50px;
+}
+
+.btn-add-to-card {
+    background-color: #d3d3d3;
+    border: none;
+    color: #699a8c;
+    font-size: 12px;
+    font-family: 'MADE Sunflower', sans-serif;
+    padding: 10px 30px;
+    border-radius: 10px;
+    cursor: pointer;
+    margin-top: 10px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    position: relative;
+    left: -75px; /* Center the button */
+}
+
+.btn-add-to-card:hover {
+    background-color: #c0c0c0;
+}
+
+
+.btn-add-to-card:hover {
+    background-color: #c0c0c0;
+}
+
+.card {
+    background-color: #007bff;
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.text p {
+    font-size: 16px;
+    font-weight: bold;
+    color: #333;
+}
