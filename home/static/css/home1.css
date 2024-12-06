@@ -7,95 +7,107 @@
 }
 /*==============body================*/
 body {
-    color: rgb(103, 60, 0);
-    max-width: 1920px;
     margin: auto;
-    font-family: Brush Script MT;
+    font-family: 'MADE Sunflower', sans-serif;
     overflow: auto;
-    background: #ffc888ab;
+    background-color: #f9f0df;
     animation: gradient 15s ease infinite;
     background-size: 400% 400%;
     background-attachment: fixed;
+    font-family: Cambria;
 }
 
-/*================background===============*/
+html {
+    scroll-behavior: smooth;
+}
+h1 {
+    font-size: 50px;
+}
+/*==============judul dan deskripsi================*/
 
-@keyframes gradient {
-    0% {
-        background-position: 0% 0%;
-    }
-    50% {
-        background-position: 100% 100%;
-    }
-    100% {
-        background-position: 0% 0%;
-    }
+.text-container {
+    position: relative;
+    display: inline-block;
 }
 
-.wave {
-    background: rgb(244, 219, 166);
-    border-radius: 1000% 1000% 0 0;
-    position: fixed;
-    width: 200%;
-    height: 8em;
-    animation: wave 10s -3s linear infinite;
-    transform: translate3d(0, 0, 0);
-    opacity: 0.8;
-    bottom: 0;
-    left: 0;
+.baground {
+    background: linear-gradient(to bottom, #f8f8ff, #ffffff); /* Gradien warna */
+    background-position: right bottom;
+    height: 730px;
+    width: 750px;
+    position: absolute;
+    top: 0;
+    left: 1px;
+    z-index: -1; /* Supaya di belakang konten */
+}
+
+.text-the {
+    font-size: 50px;
+    color: #c85c42;
+    position: relative;
+    align-items: center;
+    top: 200px; /* Posisi teks "The" lebih tinggi */
+    left: 135px;    /* Teks berada di sisi kiri */
+}
+
+.text-sweeter {
+    font-size: 50px;
+    font-weight: bold;
+    color: #c85c42;
+    position: relative;
+    top: 250px;
+    margin-left: 40px; /* Beri jarak horizontal untuk menyesuaikan tata letak */
+}
+
+.kuekue {
+    display: flex; /* Menggunakan Flexbox */
+    justify-content: center; /* Pusatkan secara horizontal */
+    align-items: center; /* Pusatkan secara vertikal (jika diperlukan) */
+}
+
+.round-planet {
+    width: 480px;
+    height: 480px;
+    border-radius: 50%; /* Membuat lingkaran */
+    position: relative;
+    z-index: 0;
+    border: 3px solid #f9f9ff; /* Garis border putih lembut */
+    display: flex;
+    justify-content: center;
+    align-items: center; /* Posisi elemen anak di tengah */
+    position: relative;
+    left: 505px;
+    top: 20px;
+}
+.round-planet img {
+    z-index: 10;
+    width: 550px;
+    transform: translate(10px, -20px);
+}
+
+/* Lingkaran dalam */
+.inner-circle {
+    position: absolute;
+    border-radius: 50%;
+    border: 2px solid #ffffff; /* Warna border putih */
+}
+
+/* Ukuran dan posisi setiap lingkaran */
+.circle-1 {
+    width: 360px;
+    height: 360px;
     z-index: -1;
 }
 
-.wave:nth-of-type(2) {
-    bottom: -1.25em;
-    animation: wave 18s linear reverse infinite;
-    opacity: 0.8;
+.circle-2 {
+    width: 240px;
+    height: 240px;
 }
 
-.wave:nth-of-type(3) {
-    bottom: -2.5em;
-    animation: wave 20s -1s reverse infinite;
-    opacity: 0.9;
+.circle-3 {
+    width: 120px;
+    height: 120px;
 }
-
-@keyframes wave {
-    2% {
-        transform: translateX(1);
-    }
-
-    25% {
-        transform: translateX(-25%);
-    }
-
-    50% {
-        transform: translateX(-50%);
-    }
-
-    75% {
-        transform: translateX(-25%);
-    }
-
-    100% {
-        transform: translateX(1);
-    }
-}
-
-/*==============judul dan deskripsi================*/
-
-.title{
-    font-size: 60px;
-    text-align: center;
-    margin:20px;
-}
-
-.description{
-    font-size: 50px;
-    align-items: center;
-    justify-content:space-evenly;
-    margin: 10px;
-    display: flex;
-}
-
 /*================ICON==========================*/
 
 .header-icon {
@@ -104,7 +116,32 @@ body {
 
 }
 
+#toggle-bar {
+    background-color: rgb(244, 219, 166); /* Gaya background untuk toggle bar */
+    padding: 10px; /* Beberapa padding */
+    border: 4px solid rgb(140, 75, 0); /* Garis batas */
+    border-radius: 15px;
+    position: absolute; /* Agar tidak mempengaruhi layout */
+}
+#toggle-bar a{
+    display: none; 
+    display: flex; 
+    flex-direction: column;
+    width: 100px;
+    align-items:flex-start;
+    font-size: 30px;
+}
+
 /*======================NAVBAR=========================*/
+.navbar {
+    position: -webkit-sticky; /* Untuk browser lama */
+    position: sticky;
+    top: 0; /* Tetap berada di bagian atas */
+    z-index: 1000;
+    background-color: #f9f0df;
+    transition: box-shadow 0.3s ease; /* Efek transisi untuk box-shadow */
+    box-shadow: none; /* Awalnya tidak ada box-shadow */
+}
 
 .navbar .container {
     position: sticky;
@@ -113,7 +150,13 @@ body {
     justify-content: space-between; /* Membuat logo, menu, dan ikon cart berjarak */
     align-items: center; /* Menjaga semua elemen sejajar secara vertikal */
     padding: 10px 10px; /* Tambahkan padding sesuai kebutuhan */
+    height: 70px;
 }
+
+.navbar.scrolled {
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Tambahkan bayangan saat scroll */
+}
+
 
 .nav-links{
     list-style: none;
@@ -122,12 +165,14 @@ body {
 }
 
 .nav-links li{
+    margin-top: 10px;
     margin-left: 20px;
+    position: relative;
 }
 
 .nav-links a{
     color: rgb(103, 60, 0);
-    font-size: 40px;
+    font-size: 30px;
 }
 
 .search-container {
@@ -255,7 +300,7 @@ body {
     margin-left: 20px;
 }
 
-@media screen and (max-width: 768px) {
+@media screen and (max-width: 1150px) {
     .bar {
         height: 3px; /* Tinggi bar */
         width: 30px; /* Lebar bar */
@@ -271,7 +316,7 @@ body {
         display: none; /* Menyembunyikan nav links secara default */
         width: 350px;
         position: absolute; /* Menjadikan box muncul di bawah toggle */
-        top: 260px; /* Atur jarak dari atas */
+        top: 70px; /* Atur jarak dari atas */
         left: 0;
         right: 0; /* Agar box melebar sesuai lebar navbar */
         background-color: rgb(244, 219, 166); /* Warna background */
@@ -297,62 +342,121 @@ body {
 }
 
 #category-allpost{
-    align-items: center;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
+    text-align: center;
+    font-size: 50px;
+    position: relative;
+    top: 120px;
+    padding-top: 130px;
+    background: #C85C42;
+    height: auto;
+}
+
+#category-allpost h1 {
+    position: relative;
+    top: -20px;
 }
 .makanan-container{
     display: flex;
-    justify-content:center;
+    justify-content:space-evenly;
     flex-wrap: wrap;
     margin: 20px;
 }
-.makanan{
-    background-color: #f9f9f9; /* Latar belakang formulir */
-    border: 1px solid #ccc; /* Garis batas */
-    border-radius: 8px; /* Sudut melengkung */
-    padding: 20px; /* Ruang di dalam formulir */
-    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1); /* Bayangan */
-    max-width: 700px; /* Lebar maksimal formulir */
-    height: 300px;
+.makanan {
+    background-color: #f9f9f9;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    padding: 12px;  /* Kurangi padding */
+    margin: 12px 0;  /* Kurangi margin */
     text-align: center;
-    margin: 10px;
-    align-items: center;
-}
-.makanan img {
-    height: 100px;
-    width: 100px;
-}
-
-.btn-show-all {
-    background-color: #d3d3d3;
-    border: none;
-    color: #699a8c;
-    font-size: 16px;
-    font-family: 'MADE Sunflower', sans-serif;
-    padding: 10px 20px;
-    border-radius: 10px;
-    cursor: pointer;
-    margin: 20px auto;
-    display: block;  /* Letakkan di tengah */
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
 }
 
-h5 {
-    margin-top: 40px;
-    margin-bottom: 40px;
-    font-size: 50px;
-    text-align: center;
+.makanan:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
 }
 
-#category-section {
+.makanan img {
+    width: 300px;
+    height: 300px;
+    border-radius: 8px;
+}
+
+.makanan-name {
+    font-size: 1.2rem;  /* Kecilkan ukuran font */
+    margin: 10px 0 6px;  /* Kurangi margin */
+    color: #333;
+}
+
+.makanan p {
+    margin: 6px 0;  /* Kurangi margin */
+    color: #555;
+    font-size: 0.9rem;  /* Kecilkan ukuran font */
+}
+
+.rating {
     display: flex;
-    flex-direction: column;
     align-items: center;
-    padding: 20px;
     justify-content: center;
-    font-size: 50px;
+    gap: 3px;  /* Kurangi jarak antar bintang */
+}
+
+.rating i {
+    font-size: 1rem;  /* Kecilkan ukuran bintang */
+    color: #ffd700;
+}
+
+.rating i.filled {
+    color: #ffa500;
+}
+
+.rating span {
+    font-size: 0.8rem;  /* Kecilkan ukuran font */
+    color: #666;
+    margin-left: 6px;
+}
+
+.kategori {
+    font-style: italic;
+    color: #777;
+    margin-bottom: 8px;  /* Kurangi margin */
+    font-size: 0.8rem;  /* Kecilkan ukuran font */
+}
+
+.rating-form {
+    margin: 10px 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;  /* Kurangi gap */
+}
+
+.rating-form label {
+    font-size: 0.8rem;  /* Kecilkan ukuran font */
+    color: #444;
+}
+
+.rating-form select {
+    padding: 3px 6px;  /* Kurangi padding */
+    border-radius: 4px;
+    border: 1px solid #ccc;
+    font-size: 0.8rem;  /* Kecilkan ukuran font */
+}
+
+.rating-form button {
+    padding: 5px 10px;  /* Kurangi padding */
+    border: none;
+    border-radius: 4px;
+    background-color: #28a745;
+    color: white;
+    font-size: 0.8rem;  /* Kecilkan ukuran font */
+    cursor: pointer;
+    transition: background-color 0.2s;
+}
+
+.rating-form button:hover {
+    background-color: #218838;
 }
 
 .btn-add-to-card {
@@ -367,16 +471,48 @@ h5 {
     margin-top: 10px;
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
     position: relative;
-    left: -75px; /* Center the button */
+    transition: background-color 0.2s;
+    bottom: 20px;
 }
 
 .btn-add-to-card:hover {
-    background-color: #c0c0c0;
+    background-color: #3f3131;
+    color: #31f7be;
 }
 
+.btn-show-all {
+    background-color: #d3d3d3;
+    border: none;
+    color: #699a8c;
+    font-size: 16px;
+    font-family: 'MADE Sunflower', sans-serif;
+    padding: 10px 20px;
+    border-radius: 10px;
+    cursor: pointer;
+    margin: 20px auto;
+    display: block;  /* Letakkan di tengah */
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    transition: background-color 0.2s;
+}
 
-.btn-add-to-card:hover {
-    background-color: #c0c0c0;
+.btn-show-all:hover {
+    background-color: #3f3131;
+    color: #31f7be;
+}
+h5 {
+    margin-top: 40px;
+    margin-bottom: 40px;
+    font-size: 50px;
+    text-align: center;
+}
+
+.section-baru {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 20px;
+    justify-content: center;
+    font-size: 50px;
 }
 
 .card {

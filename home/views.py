@@ -1,4 +1,4 @@
-from django.shortcuts import render, get_object_or_404
+from django.shortcuts import render, get_object_or_404, redirect
 from .models import PostMenu, Rating
 from django.http import JsonResponse
 
@@ -10,7 +10,10 @@ def home(request):
     for makanan in makanan_list:
         makanan.kepuasan = float(makanan.kepuasan) if makanan.kepuasan is not None else 0.0
 
-    return render(request, 'home1.html', {'makanan_list': makanan_list, 'range_angka': range_angka})
+    if request.path == '/home/' and not request.user.is_authenticated:
+        return redirect('/')
+    
+    return render(request, 'home1.html', {'makanan_list': makanan_list, 'range_angka': range_angka, 'is_logged_in': request.user.is_authenticated})
 
 def menu_detail(request, menu_id):
     post_menu = get_object_or_404(PostMenu, pk=menu_id)
@@ -35,3 +38,6 @@ def menu_detail(request, menu_id):
         'average_rating': average_rating,
         'rating_count': rating_count
     })
+
+def Profile(request):
+    return render(request, 'profile.html')

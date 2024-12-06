@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+{% load static %}
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Shopee Profile Page</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" rel="stylesheet" />
+    <link rel="stylesheet" href="{% static 'css/profile.css' %}">
+</head>
+<body>
+    <div class="header">
+        <div class="left">
+            <a href="#"><i class="fas fa-store"></i> Seller Centre</a>
+            <a href="#"><i class="fas fa-download"></i> Download</a>
+            <a href="#"><i class="fas fa-share-alt"></i> Ikuti kami di</a>
+            <a href="#"><i class="fab fa-facebook"></i></a>
+            <a href="#"><i class="fab fa-instagram"></i></a>
+            <a href="#"><i class="fab fa-twitter"></i></a>
+        </div>
+        <div class="right">
+            <a href="#"><i class="fas fa-bell icon"></i> Notifikasi</a>
+            <a href="#"><i class="fas fa-question-circle icon"></i> Bantuan</a>
+            <a href="#"><i class="fas fa-globe icon"></i> Bahasa Indonesia</a>
+            <a href="#"><i class="fas fa-user icon"></i> zulfajrizulfajri538</a>
+            <div class="search-bar">
+                <input type="text" placeholder="Search" />
+                <button><i class="fas fa-search"></i></button>
+            </div>
+            <a href="#"><i class="fas fa-shopping-cart"></i></a>
+        </div>
+    </div>
+    <div class="container">
+        <div class="sidebar">
+            <ul>
+                <li><a href="#" class="active"><i class="fas fa-user icon"></i> Akun Saya</a></li>
+                <li><a href="#"><i class="fas fa-credit-card icon"></i> Bank & Kartu</a></li>
+                <li><a href="#"><i class="fas fa-map-marker-alt icon"></i> Alamat</a></li>
+                <li><a href="#"><i class="fas fa-lock icon"></i> Ubah Password</a></li>
+                <li><a href="#"><i class="fas fa-box icon"></i> Pesanan Saya</a></li>
+            </ul>
+        </div>
+        <div class="content">
+            <h2>Profil Saya</h2>
+            <p>Kelola informasi profil Anda untuk mengontrol, melindungi dan mengamankan akun</p>
+            <form>
+                <div class="form-group">
+                    <label for="username">Username</label>
+                    <input type="text" id="username" value="zulfajrizulfajri538" disabled />
+                    <small>Username hanya dapat diubah satu (1) kali.</small>
+                </div>
+                <div class="form-group">
+                    <label for="name">Nama</label>
+                    <input type="text" id="name" />
+                </div>
+                <div class="form-group">
+                    <label for="email">Email</label>
+                    <a href="#">Tambah</a>
+                </div>
+                <div class="form-group">
+                    <label for="phone">Nomor Telepon</label>
+                    <a href="#">Tambah</a>
+                </div>
+                <div class="form-group">
+                    <label for="store-name">Nama Toko</label>
+                    <input type="text" id="store-name" value="zulfajrizulfajri538" />
+                </div>
+                <div class="form-group">
+                    <label>Jenis Kelamin</label>
+                    <div class="gender">
+                        <input type="radio" id="male" name="gender" value="male" />
+                        <label for="male">Laki-laki</label>
+                        <input type="radio" id="female" name="gender" value="female" />
+                        <label for="female">Perempuan</label>
+                        <input type="radio" id="other" name="gender" value="other" />
+                        <label for="other">Lainnya</label>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="dob">Tanggal lahir</label>
+                    <input type="text" id="dob" value="**/03/20**" disabled />
+                    <a href="#">Ubah</a>
+                </div>
+                <div class="form-group">
+                    <button type="submit" class="btn">Simpan</button>
+                </div>
+            </form>
+        </div>
+    </div>
+    <script src="{% static 'js/profile.js' %}"></script>
+</body>
+</html>

@@ -4,8 +4,7 @@ from django.utils.timezone import now
 class Client(models.Model):
     username = models.CharField(max_length=100, unique=True)
     email = models.EmailField(unique=True)
-    password = models.CharField(max_length=128)  # Untuk menyimpan hash password
-    full_name = models.CharField(max_length=200, blank=True, null=True)
+    password = models.CharField(max_length=128)
     created_at = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
