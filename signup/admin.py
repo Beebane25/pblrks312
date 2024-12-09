@@ -3,7 +3,7 @@ from .models import Client, LoginHistory
 
 @admin.register(Client)
 class ClientAdmin(admin.ModelAdmin):
-    list_display = ('username', 'email', 'created_at')  # Gunakan atribut yang valid
+    list_display = ('username', 'email','last_login', 'created_at')  # Gunakan atribut yang valid
     search_fields = ('username', 'email')  # Tambahkan pencarian berdasarkan username/email
 
 @admin.register(LoginHistory)

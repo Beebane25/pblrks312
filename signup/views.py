@@ -1,8 +1,8 @@
 from django.shortcuts import render, redirect
 from django.http import JsonResponse
+from django.utils.timezone import now
 from django.contrib.auth.hashers import check_password, make_password
 from django.contrib.auth import login, logout as auth_logout
-from django.contrib.auth.models import User
 from .models import Client, LoginHistory
 import requests
 import logging
@@ -86,6 +86,8 @@ def signup_view(request):
                 logger.debug(f"Stored password (hashed): {client.password}")
                 logger.debug(f"Entered password: {password}")
                 if check_password(password, client.password):
+                    client.last_login = now()
+                    client.save(update_fields=['last_login'])
                     # Simpan history login (berhasil)
                     LoginHistory.objects.create(
                         client=client,
@@ -96,7 +98,7 @@ def signup_view(request):
                     # Simpan user ke session
                     request.session['client_id'] = client.id
                     login(request, client)
-                    return JsonResponse({'message': 'Login successful!'}, status=200)
+                    return render(request, 'home1.html')
                 else:
                     # Simpan history login (gagal)
                     LoginHistory.objects.create(

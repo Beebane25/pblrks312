@@ -6,6 +6,8 @@ class Client(models.Model):
     email = models.EmailField(unique=True)
     password = models.CharField(max_length=128)
     created_at = models.DateTimeField(auto_now_add=True)
+    last_login = models.DateTimeField(blank=True, null=True)  # Tambahkan field last_login
+
 
     def __str__(self):
         return self.username
