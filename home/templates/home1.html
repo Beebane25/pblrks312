@@ -96,23 +96,23 @@
     </div>
     
     <div class="description">
-        <div class="baground"></div>
-        <span class="text-the">The</span>
-        <span class="text-sweeter">Sweetery</span>
-    </div>
-    </div>
-    <div class="banner_right">
-        <div class="round-planet">
-            <div class="inner-circle circle-1"></div>
-            <div class="inner-circle circle-2"></div>
-            <div class="inner-circle circle-3"></div>
-            <img src="{% static 'images/utama.png' %}" width="350px" alt="Cake Image"> 
+        <div class="banner_right">
+            <div class="round-planet">
+                <div class="banner"></div>
+                <div class="inner-circle circle-1"></div>
+                <div class="inner-circle circle-2"></div>
+                <div class="inner-circle circle-3"></div>
+                <img src="{% static 'images/utama.png' %}" alt="Cake Image"> 
+                <div class="banner-right">
+                    <span class="text-the1">The<br>Sweetery</span>
+                    <span class="text-the2"><br>Tinappropriate behavior is often laughed off as “boys will be boys,” women face higher conduct standards especially in the workplace. That’s why it’s crucial that, as women.</span>
+                </div>
+            </div>
         </div>
     </div>
     <div id="category-allpost" class="postingan">
-        <h1>All Post</h1>
         <div class="makanan-container">
-            <!-- Looping untuk menampilkan 8 makanan pertama -->
+            <h1>All Post</h1>
             {% for makanan in makanan_list %}
                 <div class="makanan" id="makanan-{{ forloop.counter }}">
                     <img src="{{ makanan.gambar.url }}" alt="{{ makanan.nama_menu }}">
@@ -152,10 +152,15 @@
         document.addEventListener('DOMContentLoaded', function() {
             const showMoreButton = document.getElementById('show-more');
             const moreContent = document.getElementById('more-content');
-    
+        
             showMoreButton.addEventListener('click', function() {
-                moreContent.style.display = 'block';
-                showMoreButton.style.display = 'none';
+                if (moreContent.style.display === 'block') {
+                    moreContent.style.display = 'none'; // Sembunyikan konten
+                    showMoreButton.textContent = 'Show More'; // Ubah teks tombol
+                } else {
+                    moreContent.style.display = 'block'; // Tampilkan konten
+                    showMoreButton.textContent = 'Show Less'; // Ubah teks tombol
+                }
             });
         });
     </script>
@@ -189,10 +194,9 @@
             });
         });
     </script>   
-
-    <div id="category-section" class="section-baru">
-        <h1>BEST SELLERS</h1>
     </div>
+    <div id="category-section" class="section-baru">
+        <h1>BEST SELLERS</h1></div>
 
     <script>
         document.addEventListener('DOMContentLoaded', function() {
@@ -203,16 +207,19 @@
             searchInput.addEventListener('input', function() {
                 const query = searchInput.value.toLowerCase();
     
-                // Mencari makanan yang sesuai dengan input pengguna
+                // Mencari makanan yang sesuai dengan inpu
                 makananList.forEach(makanan => {
                     const makananName = makanan.querySelector('.makanan-name').textContent.toLowerCase();
     
-                    if (makananName.includes(query)) {
-                        // Menggulung halaman ke posisi makanan yang ditemukan
+                    if (query === '') {
+                        makanan.style.display = 'block'; // Menampilkan kembali semua item
+                        makanan.style.border = 'none'; // Menghapus border highlight
+                    } else if (makananName.includes(query)) {
+                        makanan.style.display = 'block'; // Menampilkan item yang cocok
                         makanan.scrollIntoView({ behavior: 'smooth', block: 'center' });
-                        makanan.style.border = '2px solid rgb(103, 60, 0)'; // Highlight makanan
+                        makanan.style.border = '2px solid rgb(103, 60, 0)'; // Highlight item
                     } else {
-                        makanan.style.border = 'none'; // Menghapus highlight jika tidak cocok
+                        makanan.style.display = 'none'; // Sembunyikan item yang tidak cocok
                     }
                 });
             });
