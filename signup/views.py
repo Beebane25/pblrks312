@@ -1,8 +1,9 @@
 from django.shortcuts import render, redirect
-from django.http import JsonResponse
+from django.contrib.auth.decorators import login_required
 from django.utils.timezone import now
+from django.contrib import messages
 from django.contrib.auth.hashers import check_password, make_password
-from django.contrib.auth import login, logout as auth_logout
+from django.contrib.auth import login, logout as auth_logout, authenticate
 from .models import Client, LoginHistory
 import requests
 import logging
@@ -43,20 +44,24 @@ def signup_view(request):
             result = recaptcha_response.json()
 
             if not result.get('success'):
-                return JsonResponse({'error': 'Invalid reCAPTCHA. Please try again.'}, status=400)
+                messages.error(request, 'Invalid reCAPTCHA. Please try again.')
+                return redirect('signup')
 
             # Validasi data
             if not username or not email or not password:
-                return JsonResponse({'error': 'All fields are required.'}, status=400)
+                messages.error(request, 'Semua kolom wajib diisi.')
+                return redirect('signup')
 
             if password != password2:
-                return JsonResponse({'error': 'Passwords do not match.'}, status=400)
+                messages.error(request, 'Password tidak cocok.')
+                return redirect('signup')
 
             # Simpan data ke database
             try:
                 # Pastikan username tidak duplikat
                 if Client.objects.filter(username=username).exists():
-                    return JsonResponse({'error': 'Username already exists.'}, status=400)
+                    messages.error(request, 'Username already exists.')
+                    return redirect('signup')
 
                 # Simpan user baru
                 user = Client.objects.create(
@@ -64,12 +69,11 @@ def signup_view(request):
                     email=email,
                     password=make_password(password),  # Hash password sebelum disimpan
                 )
-                user.save()
-                return JsonResponse({'message': 'Registration successful!'}, status=201)
+                messages.success(request, 'Registration successful!')
                 
             except Exception as e:
                 logger.error(f"Error occurred during signup: {str(e)}")
-                return JsonResponse({'error': 'An error occurred. Please try again.'}, status=400)
+                messages.success(request, 'An error occurred. Please try again.')
 
     
 
@@ -79,52 +83,29 @@ def signup_view(request):
             password = request.POST.get('password')
 
             # Autentikasi user
-            try:
-                client = Client.objects.get(username=username)
-                ip_address = get_client_ip(request)
-                logger.debug(f"Attempting login for username: {username}")
-                logger.debug(f"Stored password (hashed): {client.password}")
-                logger.debug(f"Entered password: {password}")
-                if check_password(password, client.password):
-                    client.last_login = now()
-                    client.save(update_fields=['last_login'])
-                    # Simpan history login (berhasil)
-                    LoginHistory.objects.create(
-                        client=client,
-                        ip_address=ip_address,
-                        status='SUCCESS'
-                    )
-
-                    # Simpan user ke session
-                    request.session['client_id'] = client.id
-                    login(request, client)
-                    return render(request, 'home1.html')
-                else:
-                    # Simpan history login (gagal)
-                    LoginHistory.objects.create(
-                        client=client,
-                        ip_address=ip_address,
-                        status='FAIL'
-                    )
-                    return JsonResponse({'error': 'Invalid username or password.'}, status=400)
-            except Client.DoesNotExist:
-                return JsonResponse({'error': 'Invalid username or password.'}, status=400)
+            user = authenticate(request, username=username, password=password)
+        
+            if user is not None:
+                login(request, user)
+                Client.objects.filter(username=username).update(last_login=now())  # Update last_login
+                return redirect('home')  # Ganti 'home' dengan nama URL tujuan setelah login
+            else:
+                messages.error(request, 'Invalid username or password')
 
     return render(request, 'registrasi.html')
 
 # View untuk logout
 def logout_view(request):
-    if request.user.is_authenticated:
-        client_id = request.session.get('client_id')
-        client = Client.objects.get(id=client_id)
-        ip_address = get_client_ip(request)
-        # Simpan history logout
-        LoginHistory.objects.create(
-            client=client,
-            ip_address=ip_address,
-            status='LOGOUT'
-        )
-        auth_logout(request)
+    client_id = request.session.get('client_id')
+    if client_id:
+        try:
+            client = Client.objects.get(id=client_id)
+            ip_address = get_client_ip(request)
+            # Simpan history logout
+            LoginHistory.objects.create(client=client, ip_address=ip_address, status='LOGOUT', timestamp=now())
+        except Client.DoesNotExist:
+            pass
         request.session.flush()
-        return JsonResponse({'message': 'Logout successful!'}, status=200)
-    return JsonResponse({'error': 'User not logged in.'}, status=400)
+        messages.success(request, 'Logout successful!')
+        return redirect('/')
+    messages.error(request, 'User not logged in.')

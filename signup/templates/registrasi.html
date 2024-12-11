@@ -9,6 +9,13 @@
     <script src="https://www.google.com/recaptcha/api.js" async defer></script>
 </head>
 <body>
+    {% if messages %}
+    <div id="messages">
+        {% for message in messages %}
+        <div class="message {{ message.tags }}">{{ message }}</div>
+        {% endfor %}
+    </div>
+    {% endif %}
     <div class="main"> 
         <input type="checkbox" id="chk" aria-hidden="true">
             <div class="signup">
@@ -29,13 +36,25 @@
                 <form method="POST" id="loginForm">
                     {% csrf_token %}
                     <label for="chk" aria-hidden="true">Login</label>
-                    <input type="hidden" name="login" value="1">
                     <input type="text" name="username" placeholder="Username" required><br>
                     <input type="password" name="password" placeholder="Password" required><br>
+                    <input type="hidden" name="next" value="{{ request.GET.next|default:'' }}">
                     <button type="submit">Login</button>
                     <a href="/">back to home page</a>
                 </form>
             </div>
     </div>
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const messages = document.querySelectorAll('.message');
+            messages.forEach(function (message) {
+                // Tampilkan pesan sebagai alert popup
+                alert(message.textContent);
+    
+                // Hapus elemen pesan setelah muncul di alert
+                message.remove();
+            });
+        });
+    </script>
 </body>
 </html>

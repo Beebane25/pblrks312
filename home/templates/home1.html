@@ -36,9 +36,9 @@
                     </svg>
                 </a>
                 <div id="toggle-bar" style="display: none;">
-                    <a href="/signup">account</a>
+                    <a href="/home/profile">account</a>
                     <a href="#">history</a>
-                    <a href="">log out</a>
+                    <a href="/signup/">log out</a>
                 </div>
                 <script>
                     function toggleBar() {
@@ -91,7 +91,7 @@
         </div>
         <div class="cart-footer">
             <button class="close-btn">CLOSE</button>
-            <ton class="checkout-btn">Check Out</button>
+            <button class="checkout-btn">Check Out</button>
         </div>
     </div>
     
@@ -107,6 +107,13 @@
                     <span class="text-the1">The<br>Sweetery</span>
                     <span class="text-the2"><br>Tinappropriate behavior is often laughed off as “boys will be boys,” women face higher conduct standards especially in the workplace. That’s why it’s crucial that, as women.</span>
                 </div>
+            </div>
+            <div class="multi-image">
+                <img class="multi-image1" src="{% static 'images/cerry.png' %}" alt="image1">
+                <img class="multi-image1" src="{% static 'images/cerry.png' %}" alt="image2">
+                <img class="multi-image1" src="{% static 'images/cerry.png' %}" alt="image3">
+                <img class="multi-image1" src="{% static 'images/cerry.png' %}" alt="image4">
+                <img class="multi-image1" src="{% static 'images/cerry.png' %}" alt="image5">
             </div>
         </div>
     </div>
@@ -141,13 +148,14 @@
                     <button class="btn-add-to-card">Add to Cart</button>
                 </div>
                 {% if forloop.counter == 4 %}
-                    <div id="more-content" style="display:none;">
+                <div id="more-content" style="display:none;">
                 {% endif %}
-            {% endfor %}
+                {% endfor %}
+                </div>
+            </div>        
+            <button class="btn-show-all" id="show-more" style="display:block; margin: 20px auto;">Show All</button>
         </div>
     </div>
-    <button class="btn-show-all" id="show-more" style="display:block; margin: 20px auto;">Show All</button>
-    
     <script>
         document.addEventListener('DOMContentLoaded', function() {
             const showMoreButton = document.getElementById('show-more');
@@ -254,19 +262,6 @@
         cartItem.remove();
     }
 
-    // Fungsi untuk menambah jumlah item
-    function increaseQuantity(event) {
-        const cartItem = event.target.closest(".cart-item");
-        const quantityDisplay = cartItem.querySelector(".quantity-display");
-        const priceDisplay = cartItem.querySelector(".item-price");
-        const unitPrice = parseFloat(cartItem.getAttribute("data-unit-price"));
-
-        let quantity = parseInt(quantityDisplay.textContent);
-        quantity++;
-        quantityDisplay.textContent = quantity;
-
-        priceDisplay.textContent = `Rp ${(unitPrice * quantity).toFixed(2)}`;
-    }
 
     // Fungsi untuk mengurangi jumlah item
     function decreaseQuantity(event) {

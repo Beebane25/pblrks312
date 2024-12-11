@@ -7,6 +7,7 @@
 }
 /*==============body================*/
 body {
+    max-width: 1680px;
     margin: auto;
     font-family: 'MADE Sunflower', sans-serif;
     overflow: auto;
@@ -124,6 +125,63 @@ h1 {
     height: 350px;
 }
 
+.multi-image img {
+    position: absolute;
+    border-radius: 50%; 
+}
+
+.multi-image1:nth-child(1) {
+    transform: translate(-50%, -50%);
+    top: -35px;
+    right: 18px;
+    width: 100px;
+    height: auto;
+    animation: blink 3s infinite;
+}
+
+.multi-image1:nth-child(2) {
+    transform: translate(-50%, -50%);
+    top: 60px;
+    right: -155px;
+    width: 100px;
+    height: auto;
+    animation: blink 3s infinite;
+}
+
+.multi-image1:nth-child(3) {
+    transform: translate(-50%, -50%);
+    bottom: 0px;
+    right: -40px;
+    width: 100px;
+    height: auto;
+    animation: blink 3s infinite;
+}
+
+.multi-image1:nth-child(4) {
+    transform: translate(-50%, -50%);
+    bottom: 0px;
+    right: -40px;
+    width: 100px;
+    height: auto;
+    animation: blink 3s infinite;
+}
+
+.multi-image1:nth-child(5) {
+    transform: translate(-50%, -50%);
+    bottom: 0px;
+    right: -40px;
+    width: 100px;
+    height: auto;
+    animation: blink 3s infinite;
+}
+@keyframes blink {
+    0%, 100% {
+        opacity: 1; /* Teks terlihat penuh */
+    }
+    50% {
+        opacity: 0; /* Teks tidak terlihat */
+    }
+}
 /*================ICON==========================*/
 
 .header-icon {
