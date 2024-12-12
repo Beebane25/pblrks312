@@ -1,10 +1,9 @@
 from django.shortcuts import render, redirect
-from django.contrib.auth.decorators import login_required
 from django.utils.timezone import now
 from django.contrib import messages
 from django.contrib.auth.hashers import check_password, make_password
-from django.contrib.auth import login, logout as auth_logout, authenticate
 from .models import Client, LoginHistory
+from django.urls import reverse
 import requests
 import logging
 
@@ -25,7 +24,7 @@ RECAPTCHA_SECRET_KEY = '6Lcp34AqAAAAAHN4g87bwjPMoBa8vMoscNWguAOX'
 # View untuk signup
 def signup_view(request):
     if request.method == 'POST':
-        logger.debug(f"Request POST data: {request.POST}")
+        logger.debug(f"Data POST/GET: {request.POST or request.GET}")
         # Jika form signup dikirim
         if 'signup' in request.POST:
             username = request.POST.get('username')
@@ -75,25 +74,36 @@ def signup_view(request):
                 logger.error(f"Error occurred during signup: {str(e)}")
                 messages.success(request, 'An error occurred. Please try again.')
 
-    
-
-        # Jika form login dikirim
-        elif 'login' in request.POST:
-            username = request.POST.get('username')
-            password = request.POST.get('password')
-
-            # Autentikasi user
-            user = authenticate(request, username=username, password=password)
-        
-            if user is not None:
-                login(request, user)
-                Client.objects.filter(username=username).update(last_login=now())  # Update last_login
-                return redirect('home')  # Ganti 'home' dengan nama URL tujuan setelah login
-            else:
-                messages.error(request, 'Invalid username or password')
-
     return render(request, 'registrasi.html')
 
+def login(request):
+    if request.method == 'POST':
+        email = request.POST.get('email')
+        password = request.POST.get('password')
+        next_url = request.GET.get('next') or reverse('home')
+
+        try:
+            logger.debug(f"Attempting login with email: {email}")
+            client = Client.objects.filter(email=email).first()
+            if client and check_password(password, client.password):
+                # Update session
+                request.session['is_logged_in'] = True
+                request.session['username'] = client.username
+
+                # Update last_login
+                client.last_login = now()
+                client.save()
+
+                logger.info(f"Login successful for user: {client.username}")
+                return redirect(next_url)
+            else:
+                logger.warning(f"Invalid login attempt with email: {email}")
+                messages.error(request, 'Invalid email or password')
+        except Exception as e:
+            logger.error(f"Error occurred during login: {str(e)}")
+            messages.error(request, 'An error occurred. Please try again.')
+
+    return redirect('signup')
 # View untuk logout
 def logout_view(request):
     client_id = request.session.get('client_id')

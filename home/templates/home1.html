@@ -38,7 +38,7 @@
                 <div id="toggle-bar" style="display: none;">
                     <a href="/home/profile">account</a>
                     <a href="#">history</a>
-                    <a href="/signup/">log out</a>
+                    <a href="{% url 'logout' %}">Log out</a>
                 </div>
                 <script>
                     function toggleBar() {
@@ -122,7 +122,7 @@
             <h1>All Post</h1>
             {% for makanan in makanan_list %}
                 <div class="makanan" id="makanan-{{ forloop.counter }}">
-                    <img src="{{ makanan.gambar.url }}" alt="{{ makanan.nama_menu }}">
+                    <img src="{{ makanan.gambar }}" alt="{{ makanan.nama_menu }}">
                     <h2 class="makanan-name">{{ makanan.nama_menu }}</h2>
                     <p>Price: ${{ makanan.harga }}</p>
                     <div class="rating">

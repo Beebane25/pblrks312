@@ -116,23 +116,15 @@ button:hover{
 	transform: scale(1);	
 }
 /*=============POP-UP=============*/
-#messages {
-	position: fixed;
-	top: 10px;
-	right: 10px;
-	z-index: 1000;
+.alert {
+    margin: 10px;
+    padding: 10px;
+    border-radius: 5px;
+    font-size: 14px;
 }
-.message {
-	margin-bottom: 10px;
-	padding: 15px;
-	border-radius: 5px;
-	font-size: 14px;
+.alert.success {
+    color: green;
 }
-.message.success {
-	background-color: #d4edda;
-	color: #155724;
-}
-.message.error {
-	background-color: #f8d7da;
-	color: #721c24;
+.alert.error {
+    color: red;
 }

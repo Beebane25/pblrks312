@@ -4,7 +4,7 @@ class PostMenu(models.Model):
     nama_menu = models.CharField(max_length=255)
     kategori = models.CharField(max_length=255)
     harga = models.DecimalField(max_digits=10, decimal_places=2)
-    gambar = models.ImageField(upload_to='static/menu_images/')
+    gambar = models.ImageField(upload_to='media/menu_images/')
     created_at = models.DateTimeField(auto_now_add=True)
     kepuasan = models.FloatField(default=0.0)
 
