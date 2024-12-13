@@ -15,8 +15,8 @@ import os
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 MEDIA_URL = '/media/'
-MEDIA_ROOT = os.path.join('media')
 BASE_DIR = Path(__file__).resolve().parent.parent
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 LOGIN_REDIRECT_URL = '/home/'
 LOGIN_URL = '/signup/'
 SESSION_ENGINE = 'django.contrib.sessions.backends.db'

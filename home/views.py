@@ -1,5 +1,6 @@
 from django.shortcuts import render, get_object_or_404, redirect
-from django.contrib.auth.decorators import login_required
+from django.views.decorators.csrf import csrf_exempt
+import json
 from django.contrib.auth import logout
 from .models import PostMenu, Rating
 from django.http import JsonResponse
@@ -53,11 +54,32 @@ def menu_detail(request, menu_id):
         'makanan_list': makanan_list
     })
 
-def update_kepuasan(self):
-    ratings = self.rating_set.aggregate(average=Avg('nilai'))['average'] or 0
-    self.kepuasan = ratings
-    self.save()
+@csrf_exempt
+def update_rating(request, menu_id):
+    if request.method == 'POST':
+        try:
+            data = json.loads(request.body)
+            rating_value = int(data.get('rating'))
 
+            if rating_value < 1 or rating_value > 5:
+                return JsonResponse({'success': False, 'message': 'Invalid rating value.'}, status=400)
+
+            # Ambil menu berdasarkan ID
+            post_menu = PostMenu.objects.get(id=menu_id)
+
+            # Simpan rating ke database
+            Rating.objects.create(post_menu=post_menu, nilai=rating_value)
+
+            # Update kepuasan
+            post_menu.update_kepuasan()
+
+            return JsonResponse({'success': True, 'message': 'Rating berhasil ditambahkan dan kepuasan diperbarui.'})
+        except PostMenu.DoesNotExist:
+            return JsonResponse({'success': False, 'message': 'Menu tidak ditemukan.'}, status=404)
+        except Exception as e:
+            return JsonResponse({'success': False, 'message': f'Error: {str(e)}'}, status=500)
+    else:
+        return JsonResponse({'success': False, 'message': 'Invalid request method.'}, status=405)
 def Profile(request):
     if not request.session.get('is_logged_in', False):
         return redirect('signup')  # Redirect ke signup jika belum login

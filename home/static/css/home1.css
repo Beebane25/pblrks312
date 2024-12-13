@@ -434,6 +434,15 @@ h1 {
     flex-wrap: wrap;
     margin: 20px;
 }
+#makanan-container, #more-content {
+    transition: all 0.3s ease-in-out;
+}
+
+#makanan-container.hidden, #more-content.hidden {
+    opacity: 0;
+    transform: scale(0.95);
+    display: none;
+}
 .makanan {
     background-color: #f9f9f9;
     border: 1px solid #ddd;
