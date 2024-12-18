@@ -30,7 +30,7 @@ AUTHENTICATION_BACKENDS = [
 
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = 'django-insecure-^nx4&c#j+vc-+1nif-plt(8fdo%qu3&=l^4ws3!cyix%1^it02'
-
+AUTH_USER_MODEL = 'signup.Client'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
@@ -58,6 +58,8 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'django.contrib.auth',
+    'rest_framework',
     'signup',
     'home',
 ]
@@ -67,6 +69,7 @@ MIDDLEWARE = [
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
+    'django.contrib.auth.middleware.AuthenticationMiddleware', 
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]

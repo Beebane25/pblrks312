@@ -86,12 +86,10 @@
 
     <div id="shoppingCart" class="cart-sidebar">
         <h2>Shopping Cart</h2>
-        <div class="cart-items">
-            <!-- Isi keranjang belanja akan ditampilkan di sini -->
-        </div>
+        <div class="cart-items"></div>
         <div class="cart-footer">
             <button class="close-btn">CLOSE</button>
-            <button class="checkout-btn">Check Out</button>
+            <a href="{% url 'pembelian_page' %}">Pembelian</a>
         </div>
     </div>
     
@@ -109,11 +107,11 @@
                 </div>
             </div>
             <div class="multi-image">
-                <img class="multi-image1" src="{% static 'images/cerry.png' %}" alt="image1">
-                <img class="multi-image1" src="{% static 'images/cerry.png' %}" alt="image2">
-                <img class="multi-image1" src="{% static 'images/cerry.png' %}" alt="image3">
-                <img class="multi-image1" src="{% static 'images/cerry.png' %}" alt="image4">
-                <img class="multi-image1" src="{% static 'images/cerry.png' %}" alt="image5">
+                <img class="multi-image1" src="{% static 'images/5.png' %}" alt="image1">
+                <img class="multi-image1" src="{% static 'images/6.png' %}" alt="image2">
+                <img class="multi-image1" src="{% static 'images/7.png' %}" alt="image3">
+                <img class="multi-image1" src="{% static 'images/8.png' %}" alt="image4">
+                <img class="multi-image1" src="{% static 'images/9.png' %}" alt="image5">
             </div>
         </div>
     </div>
@@ -121,37 +119,41 @@
         <div class="makanan-container">
             <h1>All Post</h1>
             {% for makanan in makanan_list %}
-                <div class="makanan" id="makanan-{{ forloop.counter }}">
-                    <img src="{{ MEDIA_URL }}{{ makanan.gambar }}" alt="{{ makanan.nama_menu }}">
-                    <h2 class="makanan-name">{{ makanan.nama_menu }}</h2>
-                    <p>Price: ${{ makanan.harga }}</p>
-                    <div class="rating">
-                        {% for i in range_angka %}
-                            {% if i <= makanan.kepuasan %}
-                                <i class="fas fa-star filled"></i>
-                            {% else %}
-                                <i class="fas fa-star"></i>
-                            {% endif %}
-                        {% endfor %}
-                        <span>{{ makanan.kepuasan }}%</span>
-                    </div>
-                    <p class="kategori">Category: {{ makanan.kategori }}</p>
-                    <form class="rating-form" data-menu-id="{{ makanan.id }}">
-                        <label for="rating-{{ makanan.id }}">Rate:</label>
-                        <select id="rating-{{ makanan.id }}" name="rating">
-                            {% for i in range_angka %}
-                                <option value="{{ i }}">{{ i }}</option>
-                            {% endfor %}
-                        </select>
-                        <button type="submit">Submit</button>
-                    </form>
-                    <button class="btn-add-to-card">Add to Cart</button>
+            <div class="makanan" id="makanan-{{ forloop.counter }}">
+                <img src="{{ MEDIA_URL }}{{ makanan.gambar }}" alt="{{ makanan.nama_menu }}">
+                <h2 class="makanan-name">{{ makanan.nama_menu }}</h2>
+                <p>Price: ${{ makanan.harga }}</p>
+                <div class="rating">
+                    {% for i in range_angka %}
+                        {% if i <= makanan.kepuasan %}
+                            <i class="fas fa-star filled"></i>
+                        {% else %}
+                            <i class="fas fa-star"></i>
+                        {% endif %}
+                    {% endfor %}
+                    <span>{{ makanan.kepuasan }}%</span>
                 </div>
-                {% if forloop.counter == 4 %}
-                <div id="more-content" class="makanan-container" style="display:none;">
-                {% endif %}
-                {% endfor %}
-                
+                <p class="kategori">Category: {{ makanan.kategori }}</p>
+                <form class="rating-form" data-menu-id="{{ makanan.id }}">
+                    <label for="rating-{{ makanan.id }}">Rate:</label>
+                    <select id="rating-{{ makanan.id }}" name="rating">
+                        {% for i in range_angka %}
+                            <option value="{{ i }}">{{ i }}</option>
+                        {% endfor %}
+                    </select>
+                    <button type="submit">Submit</button>
+                </form>
+                <button 
+                    class="btn-add-to-cart" 
+                    data-menu-id="{{ makanan.id }}"
+                    data-client-id="{{ request.session.client_id }}">
+                    Tambahkan ke Keranjang
+                </button>
+            </div>
+            {% endfor %}
+            {% if forloop.counter == 4 %}
+            <div id="more-content" class="makanan-container" style="display:none;">
+            {% endif %}
             </div>    
         </div>            
         <button class="btn-show-all" id="show-more" style="display:block; margin: 20px auto;">Show All</button>
@@ -210,35 +212,6 @@
             });
         });
     </script>
-    <script>
-        document.querySelectorAll('.rating-star').forEach(star => {
-            star.addEventListener('click', function () {
-                const menuId = this.dataset.menuId;  // ID menu terkait
-                const ratingValue = this.dataset.value;  // Nilai rating (1-5)
-                fetch(`/menu/${menuId}/`, {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                        'X-CSRFToken': '{{ csrf_token }}'
-                    },
-                    body: JSON.stringify({ rating: ratingValue })
-                })
-                .then(response => response.json())
-                .then(data => {
-                    if (data.success) {
-                        alert(data.message);
-                        location.reload(); // Reload halaman untuk memperbarui kepuasan
-                    } else {
-                        alert(data.message);
-                    }
-                })
-                .catch(error => {
-                    console.error('Error:', error);
-                    es.status(500).json({ success: false, message: 'Server error' });
-                });
-            });
-        });
-    </script>   
     </div>
     <div id="category-section" class="section-baru">
         <h1>BEST SELLERS</h1></div>
@@ -254,7 +227,7 @@
     
                 // Mencari makanan yang sesuai dengan inpu
                 makananList.forEach(makanan => {
-                    const makananName = makanan.querySelector('.makanan-name').textContent.toLowerCase();
+                    const makananName = makanan.querySelector('.makanan-name', '.kategori').textContent.toLowerCase();
     
                     if (query === '') {
                         makanan.style.display = 'block'; // Menampilkan kembali semua item
@@ -262,7 +235,7 @@
                     } else if (makananName.includes(query)) {
                         makanan.style.display = 'block'; // Menampilkan item yang cocok
                         makanan.scrollIntoView({ behavior: 'smooth', block: 'center' });
-                        makanan.style.border = '2px solid rgb(103, 60, 0)'; // Highlight item
+                        makanan.style.border = '5px solid rgb(103, 60, 0)'; // Highlight item
                     } else {
                         makanan.style.display = 'none'; // Sembunyikan item yang tidak cocok
                     }
@@ -270,118 +243,61 @@
             });
         });
     </script>
+    <script>
+        document.querySelectorAll('.btn-add-to-cart').forEach(button => {
+            button.addEventListener('click', function() {
+                const menuId = this.getAttribute('data-menu-id');
+                const clientId = this.getAttribute('data-client-id');
+
+                fetch(`/cart/add/${menuId}/`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-CSRFToken': '{{ csrf_token }}'  // Pastikan token CSRF ini ada
+                    },
+                    body: JSON.stringify({ client_id: clientId })
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        alert('Item berhasil ditambahkan ke keranjang');
+                    } else {
+                        alert(data.message);
+                    }
+                })
+                .catch(error => console.error('Error:', error));
+            });
+        });
+    </script>
+    <script>
+        function loadCartItems() {
+            fetch('/cart/')
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    const cartContainer = document.querySelector('.cart-items');
+                    cartContainer.innerHTML = ''; // Hapus konten sebelumnya
+                    data.items.forEach(item => {
+                        const itemElement = document.createElement('div');
+                        itemElement.innerHTML = `
+                            <p>${item.menu__nama_menu} x${item.quantity} - $${item.menu__harga}</p>
+                            <button data-id="${item.id}" class="remove-btn">Hapus</button>
+                        `;
+                        cartContainer.appendChild(itemElement);
+                    });
+                }
+            });
+        }
+
+        document.addEventListener('DOMContentLoaded', function() {
+            loadCartItems();
+        });
+    </script>
 </div>
     <div id="category-section2" class="section2-kedua">
         <h3>CATEGORY</h3>
     </div>
 
-<script>
-    const cartIcon = document.getElementById("cart-icon");
-    const cartSidebar = document.querySelector(".cart-sidebar");
-    const cartItemsContainer = document.querySelector(".cart-items");
-    const closeBtn = document.querySelector(".close-btn");
-    
-    // Seleksi semua tombol "Add to Cart" dari kedua kategori
-    const addToCartButtons = document.querySelectorAll(".makanan .btn-add-to-card, .makanan2 .btn-add-to-card");
-
-    // Fungsi untuk menampilkanbut sidebar keranjang
-    function openCartSidebar() {
-        cartSidebar.style.right = "0";
-    }
-
-    // Fungsi untuk menutup sidebar keranjang
-    function closeCartSidebar() {
-        cartSidebar.style.right = "-100%";
-    }
-
-    // Fungsi untuk menghapus item dari keranjang
-    function removeCartItem(cartItem) {
-        cartItem.remove();
-    }
-
-
-    // Fungsi untuk mengurangi jumlah item
-    function decreaseQuantity(event) {
-        const cartItem = event.target.closest(".cart-item");
-        const quantityDisplay = cartItem.querySelector(".quantity-display");
-        const priceDisplay = cartItem.querySelector(".item-price");
-        const unitPrice = parseFloat(cartItem.getAttribute("data-unit-price"));
-
-        let quantity = parseInt(quantityDisplay.textContent);
-        
-        if (quantity > 1) {
-            quantity--;
-            quantityDisplay.textContent = quantity;
-            priceDisplay.textContent = `Rp ${(unitPrice * quantity).toFixed(2)}`;
-        } else {
-            removeCartItem(cartItem);
-        }
-    }
-
-    // Fungsi untuk menambahkan item ke keranjang
-    function addToCart(event) {
-        const makananElement = event.target.closest(".makanan, .makanan2");
-        const itemName = makananElement.querySelector(".makanan-name").textContent;
-        const itemPrice = parseFloat(makananElement.querySelector("p").textContent.replace(/[^0-9.-]+/g,""));
-        const itemImageSrc = makananElement.querySelector("img").src;
-
-        // Cek apakah item sudah ada di keranjang
-        const existingCartItem = Array.from(cartItemsContainer.children).find(item => 
-            item.querySelector("h4").textContent === itemName
-        );
-
-        if (existingCartItem) {
-            const quantityDisplay = existingCartItem.querySelector(".quantity-display");
-            quantityDisplay.textContent = parseInt(quantityDisplay.textContent) + 1;
-            const priceDisplay = existingCartItem.querySelector(".item-price");
-            const unitPrice = parseFloat(existingCartItem.getAttribute("data-unit-price"));
-            const newQuantity = parseInt(quantityDisplay.textContent);
-            priceDisplay.textContent = `Rp ${(unitPrice * newQuantity).toFixed(2)}`;
-        } else {
-            const cartItem = document.createElement("div");
-            cartItem.classList.add("cart-item");
-            cartItem.setAttribute("data-unit-price", itemPrice);
-            cartItem.innerHTML = `
-                <div style="display: flex; align-items: center; gap: 10px; width: 100%;">
-                    <img src="${itemImageSrc}" alt="${itemName}" width="50" height="50">
-                    <div style="flex-grow: 1;">
-                        <h4>${itemName}</h4>
-                        <p class="item-price">Rp ${itemPrice.toFixed(2)}</p>
-                    </div>
-                    <div class="quantity-controls" style="display: flex; align-items: center; gap: 5px;">
-                        <button class="quantity-btn decrease-btn">-</button>
-                        <span class="quantity-display">1</span>
-                        <button class="quantity-btn increase-btn">+</button>
-                    </div>
-                </div>
-            `;
-
-            const increaseButton = cartItem.querySelector(".increase-btn");
-            const decreaseButton = cartItem.querySelector(".decrease-btn");
-            increaseButton.addEventListener("click", increaseQuantity);
-            decreaseButton.addEventListener("click", decreaseQuantity);
-
-            cartItemsContainer.appendChild(cartItem);
-        }
-    }
-
-    // Event listener untuk tombol "Add to Cart" dari kedua kategori
-    addToCartButtons.forEach(button => {
-        button.addEventListener("click", addToCart);
-    });
-
-    cartIcon.addEventListener("click", openCartSidebar);
-    closeBtn.addEventListener("click", closeCartSidebar);
-
-    document.addEventListener("scroll", function () {
-    const navbar = document.querySelector(".navbar"); // Pilih elemen navbar
-    if (window.scrollY > 0) { // Jika halaman digulir
-        navbar.classList.add("scrolled");
-    } else {
-        navbar.classList.remove("scrolled");
-    }
-});
-</script>
 </div>
 </body>
 </html>

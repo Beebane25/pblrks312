@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pembelian</title>
+</head>
+<body>
+    <h1>Pembelian Menu</h1>
+    <form id="pembelian-form" method="POST">
+        {% csrf_token %}
+        <label for="client_id">Client ID:</label>
+        <input type="text" id="client_id" name="client_id" required><br><br>
+    
+        <div id="cart-items">
+            <!-- Cart items will be dynamically inserted here -->
+        </div>
+
+        <button type="submit">Beli</button>
+    </form>
+    <a href="/">back</a>
+    <div id="response-message"></div> <!-- To display the response message -->
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Ambil data keranjang dari localStorage
+            let cart = JSON.parse(localStorage.getItem('cart')) || [];
+            cart.push({ id: menuId, name: 'Menu Name', harga: 100 });
+            localStorage.setItem('cart', JSON.stringify(cart));
+            // Menampilkan item-item keranjang dalam form
+            const cartItemsContainer = document.getElementById('cart-items');
+            cart.forEach(item => {
+                const menuItem = document.createElement('div');
+                menuItem.innerHTML = `
+                    <p>Menu: ${item.name} (ID: ${item.id})</p>
+                    <input type="hidden" name="menu_id" value="${item.id}">
+                `;
+                cartItemsContainer.appendChild(menuItem);
+            });
+    
+            // Kirimkan formulir ketika submit
+            const form = document.getElementById('pembelian-form');
+            form.onsubmit = async (event) => {
+                event.preventDefault();
+                const client_id = document.getElementById('client_id').value;
+                const menu_ids = Array.from(document.querySelectorAll('[name="menu_id"]')).map(input => input.value);
+                const csrfToken = document.querySelector('[name=csrfmiddlewaretoken]').value;
+                // Kirim data pembelian ke server
+                const response = await fetch('/pembelian/', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-CSRFToken': csrfToken
+                    },
+                    body: JSON.stringify({ client_id, menu_ids })
+                });
+    
+                const result = await response.json();
+                const messageElement = document.getElementById('response-message');
+                if (response.ok) {
+                    messageElement.textContent = `Pembelian berhasil. Saldo tersisa: ${result.saldo_tersisa}`;
+                } else {
+                    messageElement.textContent = `Gagal: ${result.error}`;
+                }
+            };
+        });
+    </script>
+</body>
+</html>

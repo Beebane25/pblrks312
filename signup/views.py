@@ -1,6 +1,7 @@
 from django.shortcuts import render, redirect
-from django.utils.timezone import now
+from django.utils.timezone import localtime
 from django.contrib import messages
+from django.contrib.auth import authenticate, login
 from django.contrib.auth.hashers import check_password, make_password
 from .models import Client, LoginHistory
 from django.urls import reverse
@@ -34,11 +35,12 @@ def signup_view(request):
             recaptcha_token = request.POST.get('g-recaptcha-response')
 
             # Verifikasi Google reCAPTCHA
+            if not recaptcha_token:
+                messages.error(request, 'Please complete the reCAPTCHA.')
+                return redirect('signup')
+
             recaptcha_url = 'https://www.google.com/recaptcha/api/siteverify'
-            recaptcha_data = {
-                'secret': RECAPTCHA_SECRET_KEY,
-                'response': recaptcha_token,
-            }
+            recaptcha_data = {'secret': RECAPTCHA_SECRET_KEY, 'response': recaptcha_token}
             recaptcha_response = requests.post(recaptcha_url, data=recaptcha_data)
             result = recaptcha_response.json()
 
@@ -47,61 +49,77 @@ def signup_view(request):
                 return redirect('signup')
 
             # Validasi data
-            if not username or not email or not password:
+            if not username or not email or not password or not password2:
                 messages.error(request, 'Semua kolom wajib diisi.')
                 return redirect('signup')
 
             if password != password2:
                 messages.error(request, 'Password tidak cocok.')
                 return redirect('signup')
+            
+            if Client.objects.filter(username=username).exists():
+                messages.error(request, 'Username already exists.')
+                return redirect('signup')
 
             # Simpan data ke database
             try:
-                # Pastikan username tidak duplikat
-                if Client.objects.filter(username=username).exists():
-                    messages.error(request, 'Username already exists.')
-                    return redirect('signup')
-
-                # Simpan user baru
                 user = Client.objects.create(
                     username=username,
                     email=email,
-                    password=make_password(password),  # Hash password sebelum disimpan
+                    password=make_password(password)
                 )
-                messages.success(request, 'Registration successful!')
-                
+                messages.success(request, 'Registration successful! Please log in.')
             except Exception as e:
                 logger.error(f"Error occurred during signup: {str(e)}")
-                messages.success(request, 'An error occurred. Please try again.')
+                messages.error(request, 'An error occurred. Please try again.')
 
     return render(request, 'registrasi.html')
 
 def login(request):
     if request.method == 'POST':
-        email = request.POST.get('email')
+        email = request.POST.get('email', '').strip()
         password = request.POST.get('password')
-        next_url = request.GET.get('next') or reverse('home')
+        if request.user.is_authenticated:
+            next_page = request.GET.get('next', '/default-page/')  # Halaman setelah login
+            return redirect(next_page)
+        if not email or not password:
+            messages.error(request, 'Email dan password harus diisi.')
+            return redirect('signup')
 
         try:
-            logger.debug(f"Attempting login with email: {email}")
             client = Client.objects.filter(email=email).first()
             if client and check_password(password, client.password):
-                # Update session
                 request.session['is_logged_in'] = True
                 request.session['username'] = client.username
+                request.session['client_id'] = client.id
 
-                # Update last_login
-                client.last_login = now()
+                # Update last login
+                client.last_login = localtime()
                 client.save()
 
-                logger.info(f"Login successful for user: {client.username}")
-                return redirect(next_url)
+                ip_address = get_client_ip(request)
+                LoginHistory.objects.create(
+                    client=client,
+                    login_time=localtime(),
+                    ip_address=ip_address,
+                    status='SUCCESS'
+                )
+
+                messages.success(request, 'Login successful!')
+                return redirect('home')
             else:
-                logger.warning(f"Invalid login attempt with email: {email}")
-                messages.error(request, 'Invalid email or password')
+                messages.error(request, 'Email atau password salah.')
+                if client:
+                    ip_address = get_client_ip(request)
+                    LoginHistory.objects.create(
+                        client=client,
+                        login_time=localtime(),
+                        ip_address=ip_address,
+                        status='FAIL'
+                    )
         except Exception as e:
             logger.error(f"Error occurred during login: {str(e)}")
-            messages.error(request, 'An error occurred. Please try again.')
+            messages.error(request, 'Terjadi kesalahan saat login.')
 
     return redirect('signup')
 # View untuk logout
@@ -112,10 +130,9 @@ def logout_view(request):
             client = Client.objects.get(id=client_id)
             ip_address = get_client_ip(request)
             # Simpan history logout
-            LoginHistory.objects.create(client=client, ip_address=ip_address, status='LOGOUT', timestamp=now())
+            LoginHistory.objects.create(client=client, ip_address=ip_address, status='LOGOUT', timestamp=localtime())
         except Client.DoesNotExist:
             pass
-        request.session.flush()
-        messages.success(request, 'Logout successful!')
-        return redirect('/')
-    messages.error(request, 'User not logged in.')
+    request.session.flush()  # Hapus semua data session
+    messages.success(request, 'Logout successful!')
+    return redirect('/')
